@@ -1,45 +1,21 @@
 {
-    "name": "Haskell Development Container",
-    "image": "[mcr.microsoft.com/devcontainers/universal:2](https://mcr.microsoft.com/devcontainers/universal:2)",
+    "name": "Haskell Jupyter",
+    "image": "mcr.microsoft.com/devcontainers/universal:2",
     "features": {
-        "ghcr.io/haskell/devcontainer-feature/haskell:1": {
-            "version": "latest",
-            "stack": "none",
-            "cabal": "3.10"
-        }
+      "ghcr.io/haskell/devcontainer-feature/haskell:1": {
+        "version": "latest",
+        "stack": "none",
+        "cabal": "3.10"
+      }
     },
     "customizations": {
-        "vscode": {
-            "extensions": [
-                "haskell.haskell", // Haskell Language Support
-                "alanz.vscode-hie-server" // Haskell IDE Engine (optional, but recommended)
-            ],
-            "settings": {
-                "haskell.manageHaskell": "byVscode",
-                "haskell.ghciPath": "ghci",
-                "haskell.cabalPath": "cabal",
-                "haskell.stackPath": "stack",
-                // Optional: Configure the HIE server (Haskell IDE Engine)
-                "haskell.hie.use": true,
-                "haskell.hie.configuration": {
-                    "cabal": {
-                        "arguments": [
-                            "--new-process",
-                            "--test", // Enable testing support
-                            "--enable-profiling", // Enable profiling
-                            "--enable-benchmarking" // Enable benchmarking
-                        ]
-                    },
-                    "stack": {
-                        "arguments": [
-                            "--test",
-                            "--profile"
-                        ]
-                    }
-                }
-            }
-        }
+      "vscode": {
+        "extensions": [
+          "haskell.haskell"
+        ]
+      }
     },
-    "postCreateCommand": "cabal build --project-root project && cabal build --project-root project -j$(nproc) && cabal test --project-root project",
+    "postCreateCommand": "bash .devcontainer/setup-ihaskell.sh",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
-}
+  }
+  
