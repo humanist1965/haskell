@@ -18,4 +18,16 @@ curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
 sudo apt-get update
 sudo apt-get install -y libgmp-dev
+
+
+
+curl -sSL https://get.haskellstack.org/ | sh
+git clone https://github.com/gibiansky/IHaskell
+cd IHaskell
+pip3 install -r requirements.txt
+stack install --fast
+ihaskell install --stack
+
+stack exec jupyter -- notebook
+
 ```
