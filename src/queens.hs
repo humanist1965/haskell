@@ -6,6 +6,16 @@ You have an n × n chessboard (e.g., 8 × 8 for a standard chessboard).
 You must place n queens on the board such that no two queens attack each other:
 Specifically, no queens can share the same row, column, or diagonal.
 
+To run:
+
+(1) Start ghci
+(2) Load this file 
+(3) length $ solveQueensNxN 8 -- To see how many solutions there are for an 8x8 board
+
+NOTES:
+- This brute-force algorithm can solve the queens problem for n <= 10
+- For n > 10 it takes too long. Running it on n==11 now...
+
 -}
 
 -- Ignoring the VsCode haskell package hints for the following
@@ -28,7 +38,8 @@ Example 8x8 board = [1,0,2,3,5,4,6,7]
 Using this representation ensures that:
 There can be no overall of rows and columns (1 of the key rules of the queens puzzle)
 -}
-type QueensNxNBoard = [BoardSize]
+type QueensNxNBoard = [QueenRowPosition]
+type QueenRowPosition = Int -- 0..7 for a standard board
 type BoardSize = Int -- 8 = standard board, but use bigger boards to make problem more challenging
 
 --  Create a more readable way to extract an item from a list
@@ -82,4 +93,3 @@ enumList myList =
 
 solveQueensNxN :: BoardSize -> [QueensNxNBoard]
 solveQueensNxN boardSize = filterSameDiagonal (getAllNxNBoards boardSize)
-
