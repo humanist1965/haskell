@@ -56,20 +56,23 @@ getAllPermutations = permutations
 
 
 -- filter out boards where queens are on the same diagonal
--- NOTE: There is a maths trick for doing this
 filterSameDiagonal :: [QueensNxNBoard] -> [QueensNxNBoard]
 filterSameDiagonal boardList =
     filter
         (\x -> noDiagonalOverlaps x)
         boardList
 
+-- Given a QueensNxNBoard this function return True if the queens do not sit on the same diagonal
 noDiagonalOverlaps :: QueensNxNBoard -> Bool
 noDiagonalOverlaps board =
   let n = length board
       enumBoard = enumList board
-      diags1 = foldl (\res (pos,row)->addToSet (row-pos) res) [] enumBoard
-      diags2 = foldl (\res (pos,row)->addToSet (row+pos) res) [] enumBoard
-  in length diags1 == n && length diags2 == n
+      -- To check for diagonal attacks, we calculate two sets:
+      -- 1. `diags1Set`: Stores the differences (row - column) for each queen. If any two queens are on the same "top-left to bottom-right" diagonal, they will have the same (row - column) value, and the set's length will be less than n.
+      -- 2. `diags2Set`: Stores the sums (row + column) for each queen. If any two queens are on the same "top-right to bottom-left" diagonal, they will have the same (row + column) value, and the set's length will be less than n.
+      diags1Set = foldl (\res (col,row)->addToSet (row-col) res) [] enumBoard
+      diags2Set = foldl (\res (col,row)->addToSet (row+col) res) [] enumBoard
+  in length diags1Set == n && length diags2Set == n
 
 
 enumList :: [a] -> [(Int, a)]
