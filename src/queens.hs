@@ -7,10 +7,12 @@ You must place n queens on the board such that no two queens attack each other:
 Specifically, no queens can share the same row, column, or diagonal.
 
 -}
+
+-- Ignoring the VsCode haskell package hints for the following
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Use (,)" #-}
 {-# HLINT ignore "Eta reduce" #-}
 {-# HLINT ignore "Avoid lambda" #-}
+{-# HLINT ignore "Use (,)" #-}
 
 import Data.List (permutations)
 
