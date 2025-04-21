@@ -64,15 +64,13 @@ filterSameDiagonal boardList =
 noDiagonalOverlaps :: QueensNxNBoard -> Bool
 noDiagonalOverlaps board =
   let n = length board
-      checkPair (col1, row1) (col2, row2) = abs (row1 - row2) /= abs (col1 - col2)
-      queenPositions = zip [0..n-1] board -- [(column, row)]
-  in and [checkPair q1 q2 |
-            i <- [0 .. n - 1],
-            let q1 = queenPositions !! i,
-            j <- [i + 1 .. n - 1],
-            let q2 = queenPositions !! j]
+      enumBoard = enumList board
+      diags1 = foldl (\res (pos,row)->addToSet (row-pos) res) [] enumBoard
+      diags2 = foldl (\res (pos,row)->addToSet (row+pos) res) [] enumBoard
+  in length diags1 == n && length diags2 == n
 
-enumList :: [a] -> [(Int, b)]
+
+enumList :: [a] -> [(Int, a)]
 enumList myList =
   zipWith (\index item -> (index, item)) [0..length myList - 1] myList
 
