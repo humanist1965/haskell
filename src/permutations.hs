@@ -57,33 +57,9 @@ genPerm start numItems maxPos partialList resList =
         in permsList
 
 
--- Optimized genPerm function using a Set to track used elements
-genPermOptimized :: StartPos -> NumItems -> MaxPos -> PermList -> [PermList] -> [PermList]
-genPermOptimized _ 0 _ partialList resList = partialList : resList
-genPermOptimized start numItems maxPos partialList resList =
-  let
-    -- Generate options more efficiently using a list comprehension and set difference
-    optionsList = [n | n <- [0 .. maxPos - 1], n `notElem` partialList]
-    in
-    foldl
-      (\acc option ->
-         genPermOptimized
-           start
-           (numItems - 1)
-           maxPos
-           (option : partialList)
-           acc
-      )
-      resList
-      optionsList
 
--- Wrapper function to start with an empty accumulator
-perms1 :: NumItems ->  [PermList]
-perms1 numItems  = genPermOptimized 0 numItems numItems [] []
-
-
-perms2 :: NumItems ->  [PermList]
-perms2 numItems  = genPerm 0 numItems numItems [] []
+perms :: NumItems ->  [PermList]
+perms numItems  = genPerm 0 numItems numItems [] []
 
 
 
@@ -110,12 +86,11 @@ out res = do
 
 main :: IO ()
 main = do
-  timedAction "perms1 8" (out $ perms1 8)
-  timedAction "perms2 8" (out $ perms2 8)
-  timedAction "perms1 9" (out $ perms1 9)
-  timedAction "perms2 9" (out $ perms2 9)
-  timedAction "perms1 10" (out $ perms1 10)
-  timedAction "perms2 10" (out $ perms2 10)
-  timedAction "permutatiions" (out $ permutations [0..9])
+  timedAction "perms1 8" (out $ perms 8)
+  timedAction "perms1 9" (out $ perms 9)
+  timedAction "perms1 10" (out $ perms 10)
+  timedAction "permutatiions 10" (out $ permutations [0..9])
+  timedAction "perms1 11" (out $ perms 11)
+  timedAction "permutatiions 11" (out $ permutations [0..10])
   
   
