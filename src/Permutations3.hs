@@ -15,10 +15,9 @@ beyond n=11
 {-# HLINT ignore "Eta reduce" #-}
 
 
--- module Permutations3
---   ( perms_with_filter, perms
---   ) where
-
+module Permutations3
+  ( perms_with_filter, perms, FilterFunc, main
+  ) where
 
 
 import TimedAction(timedAction)
@@ -64,8 +63,6 @@ perms numItems = genPerm alwaysTrueFilter [0..numItems-1] numItems [] []
 
 perms_with_filter :: FilterFunc -> NumItems  -> [PermList]
 perms_with_filter filterFunc numItems = genPerm filterFunc [0..numItems-1] numItems [] []
-
-
 
 
 out :: [PermList] -> IO ()
