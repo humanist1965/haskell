@@ -53,6 +53,6 @@ out res = do
 
 
 main :: IO ()
-main = forM_ [8..11] $ \n -> do
+main = forM_ [8..12] $ \n -> do
     timedAction ("perms " ++ show n) (out $ perms n)
     timedAction ("permutations " ++ show n) (out $ permutations [0..n-1])
