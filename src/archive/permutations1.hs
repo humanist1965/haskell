@@ -1,10 +1,19 @@
+{- 
+
+My First attempt to create a permutations algorithm in haskell.
+
+Replaced with src/permutations2.hs: Which is slightly slower but more readable
+
+-}
+
 
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Use camelCase" #-}
 
+import TimedAction(timedAction)
 import Data.List (permutations)
 import System.CPUTime
-import Control.Monad (when)
+import Control.Monad (when, forM_)
 import Data.Time.Clock (diffUTCTime, getCurrentTime) -- Import for a slightly different time
 
 
@@ -56,28 +65,9 @@ genPerm start numItems maxPos partialList resList =
             ) resList optionsList
         in permsList
 
-
-
 perms :: NumItems ->  [PermList]
 perms numItems  = genPerm 0 numItems numItems [] []
 
-
-
-
-
--- Modified timedAction to take the action as a parameter
-timedAction :: String -> IO a -> IO a
-timedAction description action = do
-  start_cpu <- getCPUTime
-  start_real <- getCurrentTime -- Use getCurrentTime for wall clock time
-  result <- action
-  end_cpu <- getCPUTime
-  end_real <- getCurrentTime
-  let duration_cpu = (fromIntegral (end_cpu - start_cpu)) / (10^12) :: Double -- Convert to seconds
-      duration_real = realToFrac (diffUTCTime end_real start_real) :: Double
-  -- putStrLn $ description ++ " (CPU): " ++ show duration_cpu ++ " seconds"
-  putStrLn $ description ++ " (Real): " ++ show duration_real ++ " seconds"
-  return result
 
 out :: [PermList] -> IO ()
 out res = do
@@ -85,12 +75,7 @@ out res = do
 
 
 main :: IO ()
-main = do
-  timedAction "perms1 8" (out $ perms 8)
-  timedAction "perms1 9" (out $ perms 9)
-  timedAction "perms1 10" (out $ perms 10)
-  timedAction "permutatiions 10" (out $ permutations [0..9])
-  timedAction "perms1 11" (out $ perms 11)
-  timedAction "permutatiions 11" (out $ permutations [0..10])
-  
-  
+main = forM_ [8..11] $ \n -> do
+    timedAction ("perms " ++ show n) (out $ perms n)
+    timedAction ("permutations " ++ show n) (out $ permutations [0..n-1])
+
