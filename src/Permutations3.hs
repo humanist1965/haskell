@@ -16,7 +16,7 @@ beyond n=11
 
 
 module Permutations3
-  ( perms_with_filter, perms, FilterFunc, main
+  ( perms_with_filter, perms, FilterFunc, alwaysTrueFilter, main
   ) where
 
 
@@ -46,7 +46,7 @@ genPerm filterFunc optionsList partialList resList =
                 nextOptionsList = (if isValid then removeItem num optionsList else optionsList)
             in
                 if not isValid then
-                    resList
+                    res
                 else if null nextOptionsList then
                     partialList2 : resList
                 else

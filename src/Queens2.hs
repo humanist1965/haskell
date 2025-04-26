@@ -6,11 +6,6 @@ You have an n × n chessboard (e.g., 8 × 8 for a standard chessboard).
 You must place n queens on the board such that no two queens attack each other:
 Specifically, no queens can share the same row, column, or diagonal.
 
-To run:
-
-(1) Start ghci
-(2) Load this file 
-(3) length $ solveQueensNxN 8 -- To see how many solutions there are for an 8x8 board
 
 NOTES:
 - This brute-force algorithm can solve the queens problem for n <= 10
@@ -24,11 +19,11 @@ NOTES:
 {-# HLINT ignore "Avoid lambda" #-}
 {-# HLINT ignore "Use (,)" #-}
 
-module Queens(solveQueensNxN, main ) where
+module Queens2(solveQueensNxN, main ) where
 
 
 import TimedAction(timedAction)
-import Data.List (permutations)
+import Permutations3 (perms_with_filter, alwaysTrueFilter)
 import Control.Monad (forM_)
 
 
@@ -51,10 +46,6 @@ type QueenColPosition = Int -- 0..7 for a standard board
 type QueenRowPosition = Int -- 0..7 for a standard board
 type QueenDiagNormalPosition = Int -- Trick for determining if queens are on the same diagonals
 type BoardSize = Int -- 8 = standard board, but use bigger boards to make problem more challenging
-
---  Create a more readable way to extract an item from a list
-nth :: [a] -> Int -> a
-nth list pos = list !! pos
 
 -- Type alias for Set
 -- We will use addToSet to add new items and ensure there are no duplicates
@@ -90,24 +81,9 @@ noDiagonalOverlaps board =
   in length diags1Set == n && length diags2Set == n
 
 
--- filter out boards where queens are on the same diagonal
-filterSameDiagonal :: [QueensNxNBoard] -> [QueensNxNBoard]
-filterSameDiagonal boardList =
-    filter
-        (\x -> noDiagonalOverlaps x)
-        boardList
-
-
-getAllPermutations :: QueensNxNBoard -> [QueensNxNBoard]
-getAllPermutations = permutations
-
--- getAllNxNBoards return a list of all possible QueensNxNBoard(s) with unique (row, colum) positions for the queens
-getAllNxNBoards :: BoardSize -> [QueensNxNBoard]
-getAllNxNBoards boardSize = getAllPermutations [0..(boardSize - 1)]
-
 
 solveQueensNxN :: BoardSize -> [QueensNxNBoard]
-solveQueensNxN boardSize = filterSameDiagonal (getAllNxNBoards boardSize)
+solveQueensNxN boardSize = perms_with_filter noDiagonalOverlaps boardSize 
 
 out :: Int -> IO ()
 out n = do

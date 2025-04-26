@@ -42,6 +42,39 @@ The `ghc-run` script, available within this repository, provides a convenient wa
 
 ---
 
+## Queens nXn Board puzzle
+
+**Queens.hs timings:**
+
+* Number Solutions = 92
+* Queens Problem (nxn), for n = 8 (Real): 0.032578 seconds
+
+* Number Solutions = 352
+* Queens Problem (nxn), for n = 9 (Real): 0.298950 seconds
+
+* Number Solutions = 724
+* Queens Problem (nxn), for n = 10 (Real): 3.444155 seconds
+
+* Number Solutions = 2680
+* Queens Problem (nxn), for n = 11 (Real): 42.235242 seconds
+
+
+**Queens2.hs timings:**
+
+* Number Solutions = 92
+* Queens Problem (nxn), for n = 8 (Real): 0.005985 seconds
+
+* Number Solutions = 352
+* Queens Problem (nxn), for n = 9 (Real): 0.019717 seconds
+
+* Number Solutions = 724
+* Queens Problem (nxn), for n = 10 (Real): 0.101072 seconds
+
+* Number Solutions = 2680
+* Queens Problem (nxn), for n = 11 (Real): 0.570311 seconds
+
+---
+
 ## Installing Haskell (in codespaces)
 
 ```
@@ -62,3 +95,17 @@ ihaskell install --stack
 stack exec jupyter -- notebook
 
 ```
+
+
+---
+
+## Stuff I've Learned
+
+
+
+ main :: IO ()
+ main = do
+     let solsList = solveQueensNxN 8
+         numSols = length solsList
+     putStrLn $ "Number of Solutions = " ++ show numSols
+     putStrLn $ "Solutions = " ++ show solsList
