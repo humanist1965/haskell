@@ -8,7 +8,10 @@ fi
 
 # Get the filename without the .hs extension
 filename=$(basename "$1" .hs)
-root="$(dirname "${script_dir}")"
+
+# Get the directory where the script is located
+script_dir="$(cd "$(dirname "$0")" && pwd)"
+root="${script_dir}/.."
 
 # Create build directory if it doesn't exist
 mkdir -p "${root}/build"
@@ -18,7 +21,7 @@ ghc "$1" -outputdir "${root}/build" -o "${root}/build/${filename}"
 
 # Check if compilation was successful
 if [ $? -eq 0 ]; then
-    echo "Compilation successful! $(dirname "${script_dir}")"
+    echo "Compilation successful! ${root}"
     # Run the executable
     "${root}/build/${filename}"
 else
