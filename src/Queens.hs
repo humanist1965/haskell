@@ -24,10 +24,13 @@ NOTES:
 {-# HLINT ignore "Avoid lambda" #-}
 {-# HLINT ignore "Use (,)" #-}
 
-module Queens(solveQueensNxN ) where
+module Queens(solveQueensNxN, main ) where
 
 
+import TimedAction(timedAction)
 import Data.List (permutations)
+import Control.Monad (forM_)
+
 
 
 {- QueensNxNBoard 
@@ -105,3 +108,19 @@ getAllNxNBoards boardSize = getAllPermutations [0..(boardSize - 1)]
 
 solveQueensNxN :: BoardSize -> [QueensNxNBoard]
 solveQueensNxN boardSize = filterSameDiagonal (getAllNxNBoards boardSize)
+
+out :: Int -> IO ()
+out n = do
+  putStrLn $ "Number Solutions = " ++ show n
+
+
+-- main :: IO ()
+-- main = do
+--     let solsList = solveQueensNxN 8
+--         numSols = length solsList
+--     putStrLn $ "Number of Solutions = " ++ show numSols
+--     putStrLn $ "Solutions = " ++ show solsList
+
+main :: IO ()
+main = forM_ [8..11] $ \n -> do
+    timedAction ("Queens Problem (nxn), for n = " ++ show n) (out $ length $ solveQueensNxN n)
