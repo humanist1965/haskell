@@ -28,10 +28,7 @@ import Data.Time.Clock (diffUTCTime, getCurrentTime) -- Import for a slightly di
 
 
 
-type StartPos = Int
 type NumItems = Int
-type MaxPos = Int
-type UsedList = [Int]
 type PartialPermList = [Int]
 type PermList = [Int]
 type OptionsList = [Int]
@@ -41,8 +38,8 @@ type FilterFunc = (PartialPermList -> Bool)
 removeItem :: Eq a => a -> [a] -> [a]
 removeItem x xs = filter (/= x) xs
 
-genPerm :: FilterFunc -> OptionsList -> MaxPos -> PartialPermList -> [PermList] -> [PermList]
-genPerm filterFunc optionsList maxPos partialList resList =
+genPerm :: FilterFunc -> OptionsList ->  PartialPermList -> [PermList] -> [PermList]
+genPerm filterFunc optionsList partialList resList =
     foldl (\res num->
             let partialList2 = num : partialList
                 isValid = filterFunc partialList2
@@ -53,16 +50,16 @@ genPerm filterFunc optionsList maxPos partialList resList =
                 else if null nextOptionsList then
                     partialList2 : resList
                 else
-                    genPerm filterFunc nextOptionsList maxPos partialList2 res
+                    genPerm filterFunc nextOptionsList partialList2 res
             ) resList optionsList
 
 
 
 perms :: NumItems  -> [PermList]
-perms numItems = genPerm alwaysTrueFilter [0..numItems-1] numItems [] []
+perms numItems = genPerm alwaysTrueFilter [0..numItems-1] [] []
 
 perms_with_filter :: FilterFunc -> NumItems  -> [PermList]
-perms_with_filter filterFunc numItems = genPerm filterFunc [0..numItems-1] numItems [] []
+perms_with_filter filterFunc numItems = genPerm filterFunc [0..numItems-1] [] []
 
 
 out :: [PermList] -> IO ()
