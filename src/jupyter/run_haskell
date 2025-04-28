@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+
+import subprocess
+import sys
+import time
+
+def run_haskell_realtime(haskell_file_path, *args):
+    """
+    Runs a Haskell program and displays its output in real-time.
+
+    Args:
+        haskell_file_path (str): The path to the Haskell executable.
+        *args: Any command-line arguments to pass to the Haskell program.
+    """
+    try:
+        process = subprocess.Popen(
+            ['bash', '-c', f'source common.sh && ghc-run {haskell_file_path}{" ".join(args)}'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            shell=False,
+            bufsize=1,
+            universal_newlines=True
+        )
+
+        print(f"Running Haskell program: {haskell_file_path} {' '.join(args)}")
+        while True:
+            line = process.stdout.readline()
+            if not line:
+                break
+            print(line, end='', flush=True)
+
+        stderr_output = process.stderr.read()
+        if stderr_output:
+            print(stderr_output, file=sys.stderr, end='', flush=True)
+
+        process.wait()
+        print(f"Haskell program exited with code: {process.returncode}")
+
+    except FileNotFoundError:
+        print(f"Error: Haskell file not found at {haskell_file_path}", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"An error occurred: {e}", file=sys.stderr)
+        sys.exit(1)
+
+
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python run_haskell.py <haskell_file_path> [arguments]", file=sys.stderr)
+        sys.exit(1)
+
+    haskell_file_path = sys.argv[1]
+    haskell_args = sys.argv[2:]  # Pass any additional arguments to the Haskell program
+    run_haskell_realtime(haskell_file_path, *haskell_args)
+    # Example Usage
+    # To run your compiled Haskell program:
+    # 1. Save the python code above as a python file (e.g., run_haskell.py)
+    # 2. Make sure your Haskell file is in the same directory, or provide the correct path.
+    # 3. Run from the terminal:  python run_haskell.py Queens.hs
+    #    (where Queens.hs is your Haskell file)
+    # 4.  To pass arguments to your Haskell program:
+    #    python run_haskell.py Queens.hs arg1 arg2

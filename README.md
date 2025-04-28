@@ -44,34 +44,47 @@ The `ghc-run` script, available within this repository, provides a convenient wa
 
 ## Queens nXn Board puzzle
 
-**Queens.hs timings:**
+| Board Size (N x N) | Total Solutions      | Unique Solutions     |
+|----------------------|----------------------|----------------------|
+| 1                    | 1                    | 1                    |
+| 2                    | 0                    | 0                    |
+| 3                    | 0                    | 0                    |
+| 4                    | 2                    | 1                    |
+| 5                    | 10                   | 2                    |
+| 6                    | 4                    | 1                    |
+| 7                    | 40                   | 6                    |
+| 8                    | 92                   | 12                   |
+| 9                    | 352                  | 46                   |
+| 10                   | 724                  | 92                   |
+| 11                   | 2,680                | 341                  |
+| 12                   | 14,200               | 1,787                |
+| 13                   | 73,712               | 9,233                |
+| 14                   | 365,596              | 45,752               |
+| 15                   | 2,279,184            | 285,053              |
+| 16                   | 14,772,512           | 1,846,955            |
+| 17                   | 95,815,104           | 11,977,939           |
+| 18                   | 666,090,624          | 83,263,591           |
+| 19                   | 4,968,057,848        | 621,012,754          |
+| 20                   | 39,029,188,884       | 4,878,666,808        |
+| 21                   | 314,666,222,712      | 39,333,324,973       |
+| 22                   | 2,691,008,701,644    | 336,376,244,042      |
+| 23                   | 24,233,937,684,440   | 3,029,242,658,210    |
+| 24                   | 227,514,171,973,736  | 28,439,272,956,934   |
+| 25                   | 2,207,893,435,808,350| 275,986,683,743,434  |
+| 26                   | 22,317,699,616,364,000| 2,789,712,466,510,280|
+| 27                   | 224,486,955,028,970,000| 28,060,873,303,785,000|
 
-* Number Solutions = 92
-* Queens Problem (nxn), for n = 8 (Real): 0.032578 seconds
+| Board Size (n) | Number Solutions | Queens.hs (seconds) | Queens2.hs (seconds) |
+|----------------|-------------------|-----------------------|------------------------|
+| 8              | 92                | 0.032578            | 0.005985             |
+| 9              | 352               | 0.298950            | 0.019717             |
+| 10             | 724               | 3.444155            | 0.101072             |
+| 11             | 2680              | 42.235242           | 0.570311             |
+| 12             | 14200             |                       | 3.401418             |
+| 13             | 73712             |                       | 21.686160            |
+| 14             | 365596            |                       | 149.064821           |
+| 15             | 2279184           |                       | 1078.235401          |
 
-* Number Solutions = 352
-* Queens Problem (nxn), for n = 9 (Real): 0.298950 seconds
-
-* Number Solutions = 724
-* Queens Problem (nxn), for n = 10 (Real): 3.444155 seconds
-
-* Number Solutions = 2680
-* Queens Problem (nxn), for n = 11 (Real): 42.235242 seconds
-
-
-**Queens2.hs timings:**
-
-* Number Solutions = 92
-* Queens Problem (nxn), for n = 8 (Real): 0.005985 seconds
-
-* Number Solutions = 352
-* Queens Problem (nxn), for n = 9 (Real): 0.019717 seconds
-
-* Number Solutions = 724
-* Queens Problem (nxn), for n = 10 (Real): 0.101072 seconds
-
-* Number Solutions = 2680
-* Queens Problem (nxn), for n = 11 (Real): 0.570311 seconds
 
 ---
 
@@ -102,10 +115,11 @@ stack exec jupyter -- notebook
 ## Stuff I've Learned
 
 
-
+```haskell
  main :: IO ()
  main = do
      let solsList = solveQueensNxN 8
          numSols = length solsList
      putStrLn $ "Number of Solutions = " ++ show numSols
      putStrLn $ "Solutions = " ++ show solsList
+```

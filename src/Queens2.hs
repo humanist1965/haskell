@@ -91,5 +91,5 @@ out n = do
 
 
 main :: IO ()
-main = forM_ [8..11] $ \n -> do
+main = forM_ [1..12] $ \n -> do
     timedAction ("Queens Problem (nxn), for n = " ++ show n) (out $ length $ solveQueensNxN n)
