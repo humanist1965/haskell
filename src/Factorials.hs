@@ -12,8 +12,13 @@ factorial 0 = 1
 factorial n = n * factorial (n-1)
 
 
+-- Calculate the binomial coefficient C(m, n)
+-- i.e. The number of ways to select n items from set of m 
 combinations_count:: Integer -> Integer -> Integer
-combinations_count m n = (factorial m) `div` ((factorial n) * (factorial (m - n)))
+combinations_count m n = 
+    (factorial m) 
+        `div` 
+    ((factorial n) * (factorial (m - n)))
 
 main :: IO ()
 main = do
