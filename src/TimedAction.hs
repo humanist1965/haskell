@@ -2,6 +2,7 @@ module TimedAction
   ( timedAction
   ) where
 
+import System.IO (hFlush, stdout)
 import System.CPUTime (getCPUTime)
 import Data.Time (getCurrentTime, diffUTCTime, UTCTime)
 import Text.Printf (printf)
@@ -28,4 +29,5 @@ timedAction description action = do
       duration_real = realToFrac (diffUTCTime end_real start_real) :: Double
   -- putStrLn $ description ++ " (CPU): " ++ show duration_cpu ++ " seconds"
   printf "%s (Real): %.6f seconds\n" description duration_real
+  hFlush stdout
   return result

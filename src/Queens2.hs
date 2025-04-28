@@ -21,7 +21,7 @@ NOTES:
 
 module Queens2(solveQueensNxN, main ) where
 
-
+import System.IO (hFlush, stdout)
 import TimedAction(timedAction)
 import Permutations3 (perms_with_filter, alwaysTrueFilter)
 import Control.Monad (forM_)
@@ -93,3 +93,4 @@ out n = do
 main :: IO ()
 main = forM_ [1..12] $ \n -> do
     timedAction ("Queens Problem (nxn), for n = " ++ show n) (out $ length $ solveQueensNxN n)
+    hFlush stdout  -- Forces flush after each output line

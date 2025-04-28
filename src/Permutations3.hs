@@ -20,6 +20,7 @@ module Permutations3
   ) where
 
 
+import System.IO (hFlush, stdout)
 import TimedAction(timedAction)
 import Data.List (permutations)
 import System.CPUTime
@@ -65,6 +66,7 @@ perms_with_filter filterFunc numItems = genPerm filterFunc [0..numItems-1] [] []
 out :: [PermList] -> IO ()
 out res = do
   putStrLn $ "Number perms = " ++ show (length res)
+  hFlush stdout
 
 alwaysTrueFilter :: FilterFunc
 alwaysTrueFilter partialPerm = True

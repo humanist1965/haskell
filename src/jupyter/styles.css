@@ -1,0 +1,99 @@
+.bcRed {
+    background-color: red;
+}
+
+.top-right{
+    position: fixed; /* fixed or absolute */
+    top: 10px; /* distance from the top */
+    right: 10px; /* distance from the right */
+}
+
+.breadcrumb-menu{
+    position: fixed; /* fixed or absolute */
+    top: 10px; /* distance from the top */
+    left: 10px; /* distance from the left */
+}
+
+@media print, screen {
+    .top-right {
+        display: none; 
+    }
+    .breadcrumb-menu {
+        display: none; 
+    }
+}
+
+.btn {
+            
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Disable <a> default styling when a link is within a button 
+ * NOTE: tried "button a {" originally but this didn't work??
+*/
+.abtn {
+    text-decoration: none; /* Remove underline  */
+    color: inherit; /* Inherit color from parent */
+    /*cursor: inherit; /* Inherit cursor style from parent */
+}
+
+.abtn:hover {
+    text-decoration: none; /* Remove underline  */
+    color: inherit; /* Inherit color from parent */
+    /*cursor: inherit; /* Inherit cursor style from parent */
+}
+
+.red {
+    color: red;
+}
+
+.blue {
+    color: blue;
+}
+
+.italic {
+    font-style: italic; 
+}
+
+.yellow-back {
+    background-color: yellow;
+}
+
+.red-yellow-back{
+    color: red;
+    background-color: yellow;
+}
+
+.page-spacer {
+    height: 500px;
+}
+
+@media print {
+    .page-spacer {
+        height: auto;
+        break-before: page; /* Modern replacement for page-break-before */
+    }
+}
+
+@media print {
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      border-top: 1px solid #ccc;
+      padding: 10px 0;
+      font-size: 0.8em;
+    }
+  
+}
