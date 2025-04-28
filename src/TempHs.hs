@@ -6,5 +6,4 @@
         putStrLn ""
         putStrLn "Number of ways to place 8 queens on an 8x8 board:"
         print $ combinations_count 64 8
-        print $ factorial 15
 
