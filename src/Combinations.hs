@@ -2,6 +2,7 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Use camelCase" #-}
 {-# HLINT ignore "Eta reduce" #-}
+{-# HLINT ignore "Avoid lambda" #-}
 
 module Combinations
   (  combinations, main
@@ -26,14 +27,23 @@ type OptionsList = [Int]
 removeItem :: Eq a => a -> [a] -> [a]
 removeItem x xs = filter (/= x) xs
 
+removeAllUpToItem :: Int -> [Int] -> [Int]
+removeAllUpToItem x xs = foldl (\res num->removeItem num res) xs [0..x]
+
 genPerm :: OptionsList -> NumItems -> PartialPermList -> [PermList] -> [PermList]
 genPerm optionsList numItems partialList resList = 
     foldl (\res num-> 
             let partialList2 = num : partialList
-                nextOptionsList = removeItem num optionsList
+                resLen = length partialList2
+                nextOptionsList = 
+                  if resLen == 1 then 
+                    removeAllUpToItem num optionsList 
+                  else removeItem num optionsList
             in
-                if null nextOptionsList then
+                if resLen == numItems then
                     partialList2 : resList
+                else if null nextOptionsList then
+                    resList
                 else
                     genPerm nextOptionsList numItems partialList2 res
             ) resList optionsList
