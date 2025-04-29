@@ -3,6 +3,7 @@
 {-# HLINT ignore "Use camelCase" #-}
 {-# HLINT ignore "Eta reduce" #-}
 {-# HLINT ignore "Avoid lambda" #-}
+{-# HLINT ignore "Redundant if" #-}
 
 module Combinations
   (  combinations, main
@@ -16,34 +17,26 @@ import Control.Monad (when, forM_)
 import Data.Time.Clock (diffUTCTime, getCurrentTime) -- Import for a slightly different time
 
 
-
-
 type NumItems = Int 
 type PartialPermList = [Int]
 type PermList = [Int]
 type OptionsList = [Int]
 
-         
-removeItem :: Eq a => a -> [a] -> [a]
-removeItem x xs = filter (/= x) xs
 
-removeAllUpToItem :: Int -> [Int] -> [Int]
-removeAllUpToItem x xs = foldl (\res num->removeItem num res) xs [0..x]
+afterItem :: Eq a => a -> [a] -> [a]
+afterItem x xs = tail $ dropWhile (/= x) xs
 
 genPerm :: OptionsList -> NumItems -> PartialPermList -> [PermList] -> [PermList]
 genPerm optionsList numItems partialList resList = 
     foldl (\res num-> 
             let partialList2 = num : partialList
                 resLen = length partialList2
-                nextOptionsList = 
-                  if resLen == 1 then 
-                    removeAllUpToItem num optionsList 
-                  else removeItem num optionsList
+                nextOptionsList = afterItem num optionsList
             in
                 if resLen == numItems then
-                    partialList2 : resList
+                    partialList2 : res
                 else if null nextOptionsList then
-                    resList
+                    res 
                 else
                     genPerm nextOptionsList numItems partialList2 res
             ) resList optionsList
@@ -58,5 +51,5 @@ out res = do
 
 
 main :: IO ()
-main = forM_ [3..5] $ \n -> do
+main = forM_ [3..8] $ \n -> do
     timedAction ("combinations " ++ show n) (out $ combinations (n*n) n)
