@@ -51,5 +51,5 @@ out res = do
 
 
 main :: IO ()
-main = forM_ [3..8] $ \n -> do
+main = forM_ [3..7] $ \n -> do
     timedAction ("combinations " ++ show n) (out $ combinations (n*n) n)

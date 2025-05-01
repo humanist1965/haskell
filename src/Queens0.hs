@@ -2,6 +2,8 @@
 {-# HLINT ignore "Use (,)" #-}
 {-# HLINT ignore "Eta reduce" #-}
 {-# HLINT ignore "Avoid lambda" #-}
+{-# HLINT ignore "Redundant bracket" #-}
+{-# HLINT ignore "Avoid lambda using `infix`" #-}
 module Queens0(solveQueensNxN, main ) where
 
 
@@ -33,14 +35,19 @@ addToSet it set =
 
 
 
-enumList :: [a] -> [(Int, a)]
-enumList myList =
-  zipWith (\index item -> (index, item)) [0..length myList - 1] myList
 
 -- convert the terse QueensNxNBoard into a QueensBoardColRow
 -- Needed for our noDiagonalOverlaps function
 getRowColBoard :: QueensNxNBoard -> QueensBoardColRow
-getRowColBoard board = enumList board
+getRowColBoard board = let 
+  boardSize = length board
+  in
+  map (\queenPos -> let 
+        col = queenPos `rem` boardSize
+        row = queenPos `div` boardSize
+        in
+        (col,row)
+  ) board
 
 -- Given a QueensNxNBoard this function return True if the queens do not sit on the same diagonal
 noDiagonalOverlaps :: QueensNxNBoard -> Bool
@@ -55,24 +62,57 @@ noDiagonalOverlaps board =
   in length diags1Set == n && length diags2Set == n
 
 
--- filter out boards where queens are on the same diagonal
-filterSameDiagonal :: [QueensNxNBoard] -> [QueensNxNBoard]
-filterSameDiagonal boardList =
+
+
+takeUntilDuplicate :: [Int] -> Maybe [Int]
+takeUntilDuplicate list = foldl go (Just []) list
+  where
+    go :: Maybe [Int] -> Int -> Maybe [Int]
+    go Nothing _ = Nothing
+    go (Just seen) x =
+      if x `elem` seen
+        then Nothing
+        else Just (seen ++ [x])
+      
+
+noRowOverlaps :: QueensNxNBoard -> Bool
+noRowOverlaps board = 
+  case takeUntilDuplicate rowPositions of
+    Just uniqueRows -> length uniqueRows == boardNSize
+    Nothing -> False -- Duplicate row found
+  where
+    boardNSize = length board
+    rowPositions = map (`div` boardNSize) board
+
+
+noColOverlaps :: QueensNxNBoard -> Bool
+noColOverlaps board = 
+  case takeUntilDuplicate rowPositions of
+    Just uniqueRows -> length uniqueRows == boardNSize
+    Nothing -> False -- Duplicate row found
+  where
+    boardNSize = length board
+    rowPositions = map (`rem` boardNSize) board
+
+
+filterSameRowColumnDiagonal :: [QueensNxNBoard] -> [QueensNxNBoard]
+filterSameRowColumnDiagonal boardList = 
     filter
-        (\x -> noDiagonalOverlaps x)
+        (\x -> (noRowOverlaps x) && (noColOverlaps x) && (noDiagonalOverlaps x) )
         boardList
 
 
-getAllCombinations :: NumberBoardSpaces -> NumberQueens -> [QueenPosition]
-getAllCombinations = combinations
+getAllNQueenCombinations :: NumberBoardSpaces -> NumberQueens -> [QueensNxNBoard]
+getAllNQueenCombinations = combinations
 
 -- getAllNxNBoards return a list of all possible QueensNxNBoard(s) 
 getAllNxNBoards :: BoardSize -> [QueensNxNBoard]
-getAllNxNBoards boardSize = getAllCombinations (boardSize * boardSize) boardSize
+getAllNxNBoards boardSize = getAllNQueenCombinations (boardSize * boardSize) boardSize
+
 
 
 solveQueensNxN :: BoardSize -> [QueensNxNBoard]
-solveQueensNxN boardSize = filterSameDiagonal (getAllNxNBoards boardSize)
+solveQueensNxN boardSize = filterSameRowColumnDiagonal (getAllNxNBoards boardSize)
 
 out :: Int -> IO ()
 out n = do
