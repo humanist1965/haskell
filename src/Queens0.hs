@@ -1,3 +1,11 @@
+{- 
+
+This module provides an implementation of a pure brute-force solution to the N-Queens problem.
+
+See Also: src/jupyter/queens.ipynb 
+
+ -}
+
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Use (,)" #-}
 {-# HLINT ignore "Eta reduce" #-}
@@ -61,9 +69,8 @@ noDiagonalOverlaps board =
       diags2Set :: Set QueenDiagNormalPosition = foldl (\res (col,row)->addToSet (row+col) res) [] colRowBoard
   in length diags1Set == n && length diags2Set == n
 
-
-
-
+-- Given a List of Int this function returns Nothing if there are duplicates
+--
 takeUntilDuplicate :: [Int] -> Maybe [Int]
 takeUntilDuplicate list = foldl go (Just []) list
   where
@@ -74,7 +81,7 @@ takeUntilDuplicate list = foldl go (Just []) list
         then Nothing
         else Just (seen ++ [x])
       
-
+-- Given a QueensNxNBoard this function return True if the queens do not sit on the same row
 noRowOverlaps :: QueensNxNBoard -> Bool
 noRowOverlaps board = 
   case takeUntilDuplicate rowPositions of
@@ -84,7 +91,7 @@ noRowOverlaps board =
     boardNSize = length board
     rowPositions = map (`div` boardNSize) board
 
-
+-- Given a QueensNxNBoard this function return True if the queens do not sit on the same column
 noColOverlaps :: QueensNxNBoard -> Bool
 noColOverlaps board = 
   case takeUntilDuplicate rowPositions of
@@ -94,14 +101,14 @@ noColOverlaps board =
     boardNSize = length board
     rowPositions = map (`rem` boardNSize) board
 
-
+-- Given a QueensNxNBoard this function return True if the queens do not sit either same row, same column or same diagonal
 filterSameRowColumnDiagonal :: [QueensNxNBoard] -> [QueensNxNBoard]
 filterSameRowColumnDiagonal boardList = 
     filter
         (\x -> (noRowOverlaps x) && (noColOverlaps x) && (noDiagonalOverlaps x) )
         boardList
 
-
+-- This function returns a list of all combinations of placing N-queens on an NxN board
 getAllNQueenCombinations :: NumberBoardSpaces -> NumberQueens -> [QueensNxNBoard]
 getAllNQueenCombinations = combinations
 
@@ -109,8 +116,7 @@ getAllNQueenCombinations = combinations
 getAllNxNBoards :: BoardSize -> [QueensNxNBoard]
 getAllNxNBoards boardSize = getAllNQueenCombinations (boardSize * boardSize) boardSize
 
-
-
+-- This is the top-level function for solving the N-Queens problem
 solveQueensNxN :: BoardSize -> [QueensNxNBoard]
 solveQueensNxN boardSize = filterSameRowColumnDiagonal (getAllNxNBoards boardSize)
 
@@ -120,5 +126,5 @@ out n = do
 
 
 main :: IO ()
-main = forM_ [8..11] $ \n -> do
+main = forM_ [1..8] $ \n -> do
     timedAction ("Queens Problem (nxn), for n = " ++ show n) (out $ length $ solveQueensNxN n)
