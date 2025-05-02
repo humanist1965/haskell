@@ -27,7 +27,7 @@ type IntegerList = [Integer]
 
 -- create a large List of integers
 --bigList :: IntegerList = [1..4426165368]
-bigList :: IntegerList = (createBigList 1000000)
+bigList :: IntegerList = (createBigList 4426165368)
 
 type Size = Integer
 type Count = Integer
@@ -68,6 +68,9 @@ sum bigList = foreachLoop (\resAcc num -> resAcc+num) 0 bigList
 product :: [Integer] -> Integer
 product bigList = foreachLoop (\resAcc num -> resAcc*num) 1 bigList
 
+count :: [Integer] -> Integer
+count bigList = foreachLoop (\resAcc num -> resAcc+1) 0 bigList
+
 
 out :: Integer -> IO ()
 out n = do
@@ -76,7 +79,7 @@ out n = do
 
 main :: IO ()
 main = do
-    timedAction ("Product bigList took") (out (product bigList) )
-    timedAction ("Sum bigList took") (out (sum bigList) )
+    timedAction ("Count bigList took") (out (count bigList) )
+  
 
 
