@@ -1,0 +1,13 @@
+snapshot:
+  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/23/21.yaml
+
+allow-newer: true
+
+allow-newer-deps:
+- network
+
+packages:
+- .
+
+extra-deps:
+- network-3.2.7.0  # Specify the version of the `network` package you need

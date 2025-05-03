@@ -1,33 +1,19 @@
-module Webserver1 (main) where
+import Network.Socket (withSocketsDo, listen, socket, bind, accept, close, Socket, SockAddr, SocketType(Stream), getAddrInfo, defaultHints, addrFamily, addrSocketType, addrProtocol, addrAddress)
 
-import Network (withSocketsDo, listenOn, PortID(PortNumber), accept)
-import System.IO (Handle, hPutStr, hClose, hFlush)
-import Control.Concurrent (forkIO)
-
--- Main server function
 main :: IO ()
 main = withSocketsDo $ do
-  -- Listen on port 3000
-  socket <- listenOn (PortNumber 3000)
-  putStrLn "Server running on http://localhost:3000"
-  -- Accept connections in a loop
-  serve socket
+  let host = "127.0.0.1"
+      port = 3000
 
--- Handle incoming connections
-serve :: Network.Socket -> IO ()
-serve socket = do
-  -- Accept a client connection
-  (handle, _, _) <- accept socket
-  -- Fork a thread to handle the client
-  forkIO (handleClient handle)
-  -- Continue accepting new connections
-  serve socket
+  addrInfos <- getAddrInfo (Just defaultHints) (Just host) (Just (show port))
+  let serverAddress = head addrInfos
+      address = addrAddress serverAddress
 
--- Handle a single client request
-handleClient :: Handle -> IO ()
-handleClient handle = do
-  -- Send a simple HTTP response
-  let response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nHello, World!"
-  hPutStr handle response
-  hFlush handle
-  hClose handle
+  socket' <- socket (addrFamily serverAddress) (addrSocketType serverAddress) (addrProtocol serverAddress)
+  bind socket' address
+  listen socket' 5
+  (clientSocket, clientAddress) <- accept socket'
+  putStrLn $ "Connection accepted from: " ++ show clientAddress
+  -- Handle the client connection here
+  close clientSocket
+  close socket'
