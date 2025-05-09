@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 {-# HLINT ignore "Use splitAt" #-}
+{-# HLINT ignore "Move brackets to avoid $" #-}
 module Countdown
   ( main
   ) where
@@ -76,9 +77,11 @@ solutions ns n = [e | ns' <- choices ns,
                       eval e == [n]]
 
 
-
+out :: Int -> IO ()
+out n = do
+  putStrLn $ "Number Solutions = " ++ show n
 
 -- App Sub (Val 5) (Val 10)
 main :: IO ()
 main = do
-    putStrLn $ "Countdown = " ++ show (length $ solutions [1,3,7,10,25,50] 765)
+    timedAction "Countdown "  (out $ length $ solutions [1,3,7,10,25,50] 765)
