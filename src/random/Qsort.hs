@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+{-# HLINT ignore "Redundant bracket" #-}
 module Qsort
   (   main
   ) where
@@ -11,12 +13,30 @@ qsort [] = []
 qsort (x:xs) = qsort [y | y <- xs, y <= x] ++ [x] ++ qsort [y | y <- xs, y > x]
 
 
--- Let's try to make it a bit more readable
 qsort2:: Ord a => [a] -> [a]
-qsort2 [] = []
-qsort2 (x:xs) = qsort y ++ [x] ++ qsort z where
-  y = [y | y <- xs, y <= x ]
-  z = [y | y <- xs, y > x]
+
+qsort2 []     = []
+qsort2 (x:xs) =
+  (qsort y) ++ [x] ++ (qsort z) where
+      y = [y | y <- xs, y <= x]
+      z = [y | y <- xs, y > x]
+
+
+
+bubbleSort :: Ord a => [a] -> [a]
+bubbleSort [] = []
+bubbleSort [x] = [x]
+bubbleSort (oldList) = 
+  -- Decide whether we need to loop through the list again
+  if newList == oldList 
+    then newList 
+    else bubbleSort newList 
+  where
+    x:y:xs = oldList
+    newList = if x <= y 
+      then x:bubbleSort (y:xs) 
+      else y:bubbleSort (x:xs)
+
 
 
 
