@@ -11,3 +11,4 @@ packages:
 
 extra-deps:
 - network-3.2.7.0  # Specify the version of the `network` package you need
+- time-1.12.2
