@@ -13,7 +13,15 @@ import GHC.Conc (readTVar)
 data Op = Add | Sub | Mul | Div
 data Expr = Val Int | App Op Expr Expr
 
+instance Show Op where
+    show Add = "+"
+    show Sub = "-"
+    show Mul = "*"
+    show Div = "/"
 
+instance Show Expr where
+    show (Val n) = show n
+    show (App op l r) = "(" ++ show l ++ " " ++ show op ++ " " ++ show r ++ ")"
 
 apply :: Op -> Int -> Int -> Int
 
@@ -73,4 +81,4 @@ solutions ns n = [e | ns' <- choices ns,
 -- App Sub (Val 5) (Val 10)
 main :: IO ()
 main = do
-    putStrLn $ "Choices = " ++ show (choices [1,3,4,7, 25,75])
+    putStrLn $ "Countdown = " ++ show (length $ solutions [1,3,7,10,25,50] 765)

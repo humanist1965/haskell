@@ -17,7 +17,7 @@ root="${script_dir}/.."
 mkdir -p "${root}/build"
 
 # Compile the Haskell file
-ghc "$1" -outputdir "${root}/build" -o "${root}/build/${filename}" -isrc -main-is ${filename}
+ghc "$1" -package time -outputdir "${root}/build" -o "${root}/build/${filename}" -isrc -main-is ${filename}
 
 # Check if compilation was successful
 if [ $? -eq 0 ]; then
